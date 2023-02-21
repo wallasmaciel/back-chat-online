@@ -1,11 +1,21 @@
 package com.wallas.project.chatonline;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.wallas.project.chatonline.models.Message;
+import com.wallas.project.chatonline.models.Talk;
 import com.wallas.project.chatonline.models.User;
+import com.wallas.project.chatonline.repositories.TalkRepository;
 import com.wallas.project.chatonline.repositories.UserRepository;
 import com.wallas.project.chatonline.utils.BCryptPassword;
 
@@ -13,6 +23,8 @@ import com.wallas.project.chatonline.utils.BCryptPassword;
 public class Temp implements CommandLineRunner {
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private TalkRepository talkRepository;
 	@Override
 	public void run(String... args) throws Exception {
 		User wallasUser = new User(
@@ -34,13 +46,29 @@ public class Temp implements CommandLineRunner {
 		// Verify if email not exists before insert 
 		if (userRepository.findByEmail(manuUser.getEmail()) == null)
 			userRepository.insert(manuUser);
+		// ---------------------------------------------------------
+		/*Set<UUID> participants = new HashSet<>();
+		participants.add(UUID.fromString("eb4498da-3144-4bb9-8fb7-f9e3a5189460"));
+		participants.add(UUID.fromString("a44ad869-6141-44e0-9336-5dba234402e9"));
 		// 
-		System.out.println("-------------------------------------");
-		for (User user : userRepository.findAll()) {
-			System.out.println(user.getUser_id());
-			System.out.println(user.getName());
-			System.out.println(user.getUrl_picture());
-		}
-		System.out.println("-------------------------------------");
+		List<Message> messages = new ArrayList<>();
+		messages.add(
+			new Message(
+				UUID.fromString("eb4498da-3144-4bb9-8fb7-f9e3a5189460"),
+				UUID.fromString("a44ad869-6141-44e0-9336-5dba234402e9"),
+				"Conteudo da mensagem 1",
+				new SimpleDateFormat("yyyy-mm-dd HH:MM:ss").parse("2023-02-20 19:00:00")
+			)
+		);
+		messages.add(
+				new Message(
+					UUID.fromString("a44ad869-6141-44e0-9336-5dba234402e9"),
+					UUID.fromString("eb4498da-3144-4bb9-8fb7-f9e3a5189460"),
+					"Conteudo da mensagem 2",
+					new SimpleDateFormat("yyyy-mm-dd HH:MM:ss").parse("2023-02-20 19:01:00")
+				)
+			);
+		// 
+		talkRepository.insert(new Talk(participants, messages));*/
 	}
 }

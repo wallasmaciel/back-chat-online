@@ -3,6 +3,7 @@ package com.wallas.project.chatonline.controllers;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
 import org.springframework.amqp.core.Queue;
@@ -18,6 +19,9 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.wallas.project.chatonline.entities.ChatMessageData;
 import com.wallas.project.chatonline.entities.ConnectionData;
+import com.wallas.project.chatonline.models.Message;
+import com.wallas.project.chatonline.models.Talk;
+import com.wallas.project.chatonline.repositories.TalkRepository;
 import com.wallas.project.chatonline.utils.JSONConvert;
 
 @Controller
@@ -27,6 +31,8 @@ public class MainController {
   private Map<String, String> listConsumer;
   @Autowired
   private SimpMessagingTemplate simpMessagingTemplate;
+  @Autowired
+  private TalkRepository talkRepository;
 
   public MainController(ConnectionFactory connectionFactory) throws IOException, TimeoutException {
 	  this.connection = connectionFactory.newConnection();
@@ -56,9 +62,16 @@ public class MainController {
 		}, ConsumerTag-> {})
     );
   }
-  
+ 
   @MessageMapping("/send")
   public void send(@Payload ChatMessageData chatMessageData, MessageListenerAdapter messageListenerAdapte) throws Exception {
+	  // Insert message into conversation between users
+	  UUID to = UUID.fromString(chatMessageData.getTo());
+	  UUID from = UUID.fromString(chatMessageData.getFrom());
+	  Talk talk = talkRepository.findByUsersTalk(to, from);
+	  talk.getMessages().add(new Message(to, from, chatMessageData.getContent()));
+	  talkRepository.save(talk);
+	  // Publish to rabbitmq channel
 	  channel.basicPublish("", "/user/" + chatMessageData.getTo(), null, JSONConvert.parse(chatMessageData).getBytes());
   }
 }

@@ -13,17 +13,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Talk {
 	@Id
 	private UUID talk_id;
-	private Set<String> participants;
+	private Set<UUID> participants;
 	private List<Message> messages;
 	
 	public Talk() {}
 	
-	public Talk(Set<String> participants, List<Message> messages) {
+	public Talk(Set<UUID> participants, List<Message> messages) {
+		this.talk_id = UUID.randomUUID();
 		this.participants = new HashSet<>(participants);
 		this.messages = new ArrayList<>(messages);
 	}
 	
-	public Talk(UUID talk_id, Set<String> participants, List<Message> messages) {
+	public Talk(UUID talk_id, Set<UUID> participants, List<Message> messages) {
 		this.talk_id = talk_id;
 		this.participants = new HashSet<>(participants);
 		this.messages = new ArrayList<>(messages);
@@ -35,10 +36,10 @@ public class Talk {
 	public void setTalk_id(UUID talk_id) {
 		this.talk_id = talk_id;
 	}
-	public Set<String> getParticipants() {
+	public Set<UUID> getParticipants() {
 		return participants;
 	}
-	public void setParticipants(Set<String> participants) {
+	public void setParticipants(Set<UUID> participants) {
 		this.participants = participants;
 	}
 	public List<Message> getMessages() {
