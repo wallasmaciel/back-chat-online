@@ -18,7 +18,7 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.wallas.project.chatonline.entities.ChatMessageData;
 import com.wallas.project.chatonline.entities.ConnectionData;
-import com.wallas.project.chatonline.utils.ConvertToJSON;
+import com.wallas.project.chatonline.utils.JSONConvert;
 
 @Controller
 public class MainController {
@@ -59,6 +59,6 @@ public class MainController {
   
   @MessageMapping("/send")
   public void send(@Payload ChatMessageData chatMessageData, MessageListenerAdapter messageListenerAdapte) throws Exception {
-	  channel.basicPublish("", "/user/" + chatMessageData.getTo(), null, ConvertToJSON.parse(chatMessageData).getBytes());
+	  channel.basicPublish("", "/user/" + chatMessageData.getTo(), null, JSONConvert.parse(chatMessageData).getBytes());
   }
 }
