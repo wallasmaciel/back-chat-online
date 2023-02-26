@@ -7,15 +7,19 @@ import com.rabbitmq.client.ConnectionFactory;
 
 @Configuration
 public class RabbitMQConfig {
+	private ConnectionFactory connectionFactory;
 	@Bean
 	ConnectionFactory connectionFactory() {
-		ConnectionFactory factory = new ConnectionFactory();
-	    // "guest"/"guest" by default, limited to localhost connections
-	    factory.setUsername("guest");
-	    factory.setPassword("guest");
-	    factory.setVirtualHost("/");
-	    factory.setHost("localhost");
-	    factory.setPort(5672);
-	    return factory;
+		if (connectionFactory == null) {
+			connectionFactory = new ConnectionFactory();
+		    // "guest"/"guest" by default, limited to localhost connections
+			connectionFactory.setUsername("guest");
+			connectionFactory.setPassword("guest");
+			connectionFactory.setVirtualHost("/");
+			connectionFactory.setHost("localhost");
+			connectionFactory.setPort(5672);
+		}
+		// 
+	    return connectionFactory;
     }
 }
