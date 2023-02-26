@@ -30,7 +30,7 @@ public class Temp implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		User wallasUser = new User(
 			"Wallas Vitor", 
-			"wallasmaciel919@gmail.com", 
+			"wallas@gmail.com", 
 			BCryptPassword.encode("123456"), 
 			"https://images.pexels.com/photos/4323761/pexels-photo-4323761.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 		);

@@ -73,7 +73,7 @@ public class MainController {
 			Optional<Message> talkContainsMessage = talkRepository.findByMessageTalk(receiverMessage.getMessage_Id());
 			// Talk exists 
 			try {
-				if (!talkContainsMessage.isPresent()) 
+				if (!talkContainsMessage.isPresent())
 					chatService.saveMessage(receiverMessage);
 				else
 					simpMessagingTemplate.convertAndSend("/topic" + queue.getName() + "/consume", utf8Message);
