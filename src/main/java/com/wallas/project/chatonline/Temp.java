@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -34,7 +35,7 @@ public class Temp implements CommandLineRunner {
 			"https://images.pexels.com/photos/4323761/pexels-photo-4323761.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 		);
 		// Verify if email not exists before insert 
-		if (userRepository.findByEmail(wallasUser.getEmail()) == null)
+		if (!userRepository.findByEmail(wallasUser.getEmail()).isPresent())
 			userRepository.insert(wallasUser);
 		
 		User manuUser = new User(
@@ -44,7 +45,7 @@ public class Temp implements CommandLineRunner {
 			"https://images.pexels.com/photos/5081397/pexels-photo-5081397.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 		);
 		// Verify if email not exists before insert 
-		if (userRepository.findByEmail(manuUser.getEmail()) == null)
+		if (!userRepository.findByEmail(manuUser.getEmail()).isPresent())
 			userRepository.insert(manuUser);
 		// ---------------------------------------------------------
 		/*Set<UUID> participants = new HashSet<>();
@@ -70,5 +71,28 @@ public class Temp implements CommandLineRunner {
 			);
 		// 
 		talkRepository.insert(new Talk(participants, messages));*/
+		/*
+		System.out.println("---------------------");
+		for (Talk talk : talkRepository.findAll()) {
+			System.out.println(
+				talk.getTalk_id() + "|"
+			);
+		
+			for (Message message : talk.getMessages())
+				System.out.println(
+					message.getMessage_Id() + "|" +
+					message.getTo() + "|" + 
+					message.getFrom() + "|" +
+					message.getContent()
+				);
+		}
+
+		Optional<Message> talk = talkRepository.findByMessageTalk(UUID.fromString("5571b228-06a8-437c-9e99-0506f7440d5e"));
+		System.out.println("-------dasd--------------");
+		if (talk.isPresent())
+			System.out.println("sim");
+		else
+			System.out.println("nao");
+		*/
 	}
 }

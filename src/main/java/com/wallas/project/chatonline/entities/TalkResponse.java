@@ -18,7 +18,8 @@ public class TalkResponse {
 	public TalkResponse(Talk talk) {
 		this();
 		this.talk_id = talk.getTalk_id();
-		this.messages.addAll(talk.getMessages());
+		if (talk.getMessages() != null)
+			this.messages.addAll(talk.getMessages());
 	}
 
 	public UUID getTalk_id() {
