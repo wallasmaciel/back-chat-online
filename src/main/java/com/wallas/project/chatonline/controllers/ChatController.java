@@ -8,7 +8,9 @@ import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +24,7 @@ import com.wallas.project.chatonline.entities.LoginResponse;
 import com.wallas.project.chatonline.entities.SendRequest;
 import com.wallas.project.chatonline.entities.TalkResponse;
 import com.wallas.project.chatonline.entities.UserResponse;
+import com.wallas.project.chatonline.entities.SignOnRequest;
 import com.wallas.project.chatonline.models.Message;
 import com.wallas.project.chatonline.models.Talk;
 import com.wallas.project.chatonline.models.User;
@@ -46,6 +49,21 @@ public class ChatController {
 		if (!user.isPresent() || !BCryptPassword.verifyPassword(loginPayload.getPassword(), user.get().getPassword()))
 			throw new HttpClientErrorException(HttpStatusCode.valueOf(401), "invalid authentication.");
 		return new LoginResponse(user.get());
+	}
+
+	@PostMapping("/user/sign-on")
+	ResponseEntity<String> signOn(@RequestBody SignOnRequest signOn) {
+		Optional<User> optionalUser = userRepository.findByEmail(signOn.getEmail());
+		if (optionalUser.isPresent()) throw new HttpClientErrorException(HttpStatusCode.valueOf(400), "user already exist.");
+		// 
+		User user = new User(
+			signOn.getNome(), 
+			signOn.getEmail(), 
+			BCryptPassword.encode(signOn.getPassword()), 
+			null
+		);
+		userRepository.save(user);
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
 	@GetMapping("/user/list/{user_id}")
