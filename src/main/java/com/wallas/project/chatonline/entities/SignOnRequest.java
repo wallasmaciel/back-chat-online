@@ -5,7 +5,7 @@ public class SignOnRequest {
   private String email;
   private String password;
 
-  public String getNome() {
+  public String getName() {
     return name;
   }
   public void setName(String name) {

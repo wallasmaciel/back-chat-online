@@ -57,7 +57,7 @@ public class ChatController {
 		if (optionalUser.isPresent()) throw new HttpClientErrorException(HttpStatusCode.valueOf(400), "user already exist.");
 		// 
 		User user = new User(
-			signOn.getNome(), 
+			signOn.getName(), 
 			signOn.getEmail(), 
 			BCryptPassword.encode(signOn.getPassword()), 
 			null
