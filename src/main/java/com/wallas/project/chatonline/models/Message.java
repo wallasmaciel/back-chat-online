@@ -11,6 +11,7 @@ public class Message {
 	private UUID to;
 	private UUID from;
 	private String content;
+	private String type;
 	private Date date;
 	
 	public Message() {}
@@ -21,6 +22,8 @@ public class Message {
 		this.to = UUID.fromString(jsonObject.getString("to"));
 		this.from = UUID.fromString(jsonObject.getString("from"));
 		this.content = jsonObject.getString("content");
+		if (jsonObject.has("type"))
+			this.type = jsonObject.getString("type");
 		this.date = new Date(jsonObject.getInt("date"));
 	}
 	
@@ -29,6 +32,16 @@ public class Message {
 		this.to = to;
 		this.from = from;
 		this.content = content;
+		this.type = "text";
+		this.date = new Date();
+	}
+
+	public Message(UUID to, UUID from, String content, String type) {
+		this.message_id = UUID.randomUUID();
+		this.to = to;
+		this.from = from;
+		this.content = content;
+		this.type = type;
 		this.date = new Date();
 	}
 	
@@ -37,14 +50,25 @@ public class Message {
 		this.to = to;
 		this.from = from;
 		this.content = content;
+		this.type = "text";
 		this.date = new Date();
 	}
 
-	public Message(UUID id, UUID to, UUID from, String content, Date date) {
+	public Message(UUID id, UUID to, UUID from, String content, String type) {
 		this.message_id = id;
 		this.to = to;
 		this.from = from;
 		this.content = content;
+		this.type = type;
+		this.date = new Date();
+	}
+
+	public Message(UUID id, UUID to, UUID from, String content, String type, Date date) {
+		this.message_id = id;
+		this.to = to;
+		this.from = from;
+		this.content = content;
+		this.type = type;
 		this.date = date;
 	}
 
@@ -71,6 +95,12 @@ public class Message {
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 	public Date getDate() {
 		return date;

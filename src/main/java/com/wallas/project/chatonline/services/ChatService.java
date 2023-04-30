@@ -41,13 +41,13 @@ public class ChatService {
 				talkRepository.insert(
 					new Talk(
 						Set.of(message.getTo(), message.getFrom()),
-						List.of(new Message(message.getMessage_Id(), message.getTo(), message.getFrom(), message.getContent()))
+						List.of(new Message(message.getMessage_Id(), message.getTo(), message.getFrom(), message.getContent(), message.getType()))
 					)
 				)
 			);
 		// if exists, add the new message to talk and insert
 		else {
-			talk.get().getMessages().add(new Message(message.getMessage_Id(), message.getTo(), message.getFrom(), message.getContent()));
+			talk.get().getMessages().add(new Message(message.getMessage_Id(), message.getTo(), message.getFrom(), message.getContent(), message.getType()));
 			talkRepository.save(talk.get());
 		}
 		// Publish to rabbitmq users' channel

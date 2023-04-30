@@ -65,33 +65,30 @@ public class MainController {
     listConsumer.put(
     	queue.getName(), 
 	    channel.basicConsume(queue.getName(), (consumerTag, message) -> {
-	    	String utf8Message = new String(message.getBody(), "UTF-8"); 
-			System.out.println("[*] Received message: '" + utf8Message + "' " + message.toString());
-			// Message receiver in JSON convert to class
-			Message receiverMessage = new Message(utf8Message);
-			// Verify exists message
-			Optional<Message> talkContainsMessage = talkRepository.findByMessageTalk(receiverMessage.getMessage_Id());
-			// Talk exists 
-			try {
-				if (!talkContainsMessage.isPresent())
-					chatService.saveMessage(receiverMessage);
-				else
-					simpMessagingTemplate.convertAndSend("/topic" + queue.getName() + "/consume", utf8Message);
-				channel.basicAck(message.getEnvelope().getDeliveryTag(), false);
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-		}, ConsumerTag-> {})
+        try {
+          String utf8Message = new String(message.getBody(), "UTF-8"); 
+          System.out.println("[*] Received message: '" + utf8Message + "' " + message.toString());
+          // Message receiver in JSON convert to class
+          Message receiverMessage = new Message(utf8Message);
+          // Verify exists message
+          Optional<Message> talkContainsMessage = talkRepository.findByMessageTalk(receiverMessage.getMessage_Id());
+          // Talk exists 
+          try {
+            if (!talkContainsMessage.isPresent())
+              chatService.saveMessage(receiverMessage);
+            else
+              simpMessagingTemplate.convertAndSend("/topic" + queue.getName() + "/consume", utf8Message);
+            channel.basicAck(message.getEnvelope().getDeliveryTag(), false);
+          } catch(Exception e) {
+            e.printStackTrace();
+          }
+        } catch (Exception e) {
+          System.out.println("Erro inesperado no recebimento da mensagem.");
+          e.printStackTrace();
+          //
+          channel.basicAck(message.getEnvelope().getDeliveryTag(), false);
+        }
+		  }, ConsumerTag-> {})
     );
-  }
- 
-  @MessageMapping("/send")
-  public void send(@Payload ChatMessageData chatMessageData, MessageListenerAdapter messageListenerAdapte) throws Exception {
-	  UUID to = UUID.fromString(chatMessageData.getTo());
-	  UUID from = UUID.fromString(chatMessageData.getFrom());
-	  // 
-	  chatService.saveMessage(
-		  new Message(to, from, chatMessageData.getContent())
-	  );
   }
 }

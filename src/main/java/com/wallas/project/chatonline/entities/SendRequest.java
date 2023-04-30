@@ -6,6 +6,7 @@ public class SendRequest {
 	private UUID to;
     private UUID from;
     private String content;
+	private String type;
 
 	public UUID getTo() {
 		return to;
@@ -24,5 +25,11 @@ public class SendRequest {
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 }

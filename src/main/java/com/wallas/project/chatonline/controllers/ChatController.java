@@ -100,7 +100,8 @@ public class ChatController {
 			  new Message(
 				  sendRequest.getTo(), 
 				  sendRequest.getFrom(), 
-				  sendRequest.getContent()
+				  sendRequest.getContent(),
+				  sendRequest.getType()
 			  )
 		  );
 		} catch (IOException e) {
