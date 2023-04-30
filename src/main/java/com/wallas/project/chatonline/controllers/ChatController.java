@@ -65,6 +65,14 @@ public class ChatController {
 		userRepository.save(user);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
+
+	@GetMapping("/user/{user_id}")
+	UserResponse findUser(@PathVariable UUID user_id) {
+		Optional<User> user = userRepository.findById(user_id);
+		if (!user.isPresent()) 
+			throw new HttpClientErrorException(HttpStatusCode.valueOf(404), "user not found.");
+		return new UserResponse(user.get());
+	}
 	
 	@GetMapping("/user/list/{user_id}")
 	List<UserResponse> listOthersUsers(@PathVariable UUID user_id) {
