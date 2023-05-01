@@ -66,7 +66,7 @@ public class MainController {
     	queue.getName(), 
 	    channel.basicConsume(queue.getName(), (consumerTag, message) -> {
         try {
-          String utf8Message = new String(message.getBody(), "UTF-8"); 
+          String utf8Message = new String(message.getBody()); 
           System.out.println("[*] Received message: '" + utf8Message + "' " + message.toString());
           // Message receiver in JSON convert to class
           Message receiverMessage = new Message(utf8Message);
