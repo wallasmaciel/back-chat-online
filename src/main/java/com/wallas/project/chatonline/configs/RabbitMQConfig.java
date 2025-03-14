@@ -16,7 +16,7 @@ public class RabbitMQConfig {
 			connectionFactory.setUsername("guest");
 			connectionFactory.setPassword("guest");
 			connectionFactory.setVirtualHost("/");
-			connectionFactory.setHost("localhost");
+			connectionFactory.setHost("rabbitmq");
 			connectionFactory.setPort(5672);
 		}
 		// 
